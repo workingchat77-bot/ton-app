@@ -6,11 +6,31 @@
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 </head>
 <body>
+
   <h1>Привет, это моё TON WebApp 👋</h1>
   <p>Если ты это видишь — всё работает.</p>
 
+  <!-- Кнопка подключения кошелька -->
   <div id="ton-connect-button"></div>
+
   <p id="wallet-address"></p>
+
+  <hr>
+
+  <h3>Тестовая оплата</h3>
+
+  <input
+    id="pay-amount"
+    type="number"
+    placeholder="Сумма TON (например 0.01)"
+    step="0.01"
+  />
+
+  <br><br>
+
+  <button id="pay-btn">Оплатить</button>
+
+  <p id="pay-status"></p>
 
   <script src="main.js"></script>
 </body>
