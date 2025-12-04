@@ -160,11 +160,20 @@
     </div>
 
     <div class="panel pay-box">
-      <h3>Тестовая оплата</h3>
-      <input id="pay-amount" type="number" placeholder="0.01 TON">
-      <button id="pay-btn">Оплатить</button>
-      <div id="pay-status"></div>
-    </div>
+  <h3>Тестовая оплата</h3>
+
+  <input id="pay-amount" type="number" placeholder="0.10 TON" step="0.01">
+
+  <input
+    id="pay-to"
+    type="text"
+    placeholder="Адрес получателя (UQ... / EQ... / name.ton)"
+    style="margin-top:8px;"
+  >
+
+  <button id="pay-btn">Оплатить</button>
+  <div id="pay-status"></div>
+</div>
 
     <div class="actions">
       <div class="action-btn">💼 Кабинет</div>
