@@ -2,10 +2,8 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
   manifestUrl: "https://workingchat77-bot.github.io/ton-app/tonconnect-manifest.json"
 });
 
-// Рисуем кнопку подключения кошелька
 tonConnectUI.renderWalletButton("#ton-connect-button");
 
-// Отображение подключенного кошелька
 tonConnectUI.onStatusChange((walletInfo) => {
   const el = document.getElementById("wallet-address");
 
@@ -14,28 +12,35 @@ tonConnectUI.onStatusChange((walletInfo) => {
     return;
   }
 
-  el.textContent = "Подключен кошелёк: " + walletInfo.account.address;
+  el.textContent = "Подключен: " + walletInfo.account.address;
 });
 
-// ТЕСТОВАЯ ОПЛАТА
 document.getElementById("pay-btn").onclick = async () => {
-  const amount = document.getElementById("pay-amount").value;
+  const amountStr = document.getElementById("pay-amount").value;
+  const toAddress = document.getElementById("pay-to").value.trim();
   const status = document.getElementById("pay-status");
 
-  if (!amount || Number(amount) <= 0) {
-    status.textContent = "Введите сумму";
+  if (!amountStr || Number(amountStr) <= 0) {
+    status.textContent = "Укажи сумму";
+    return;
+  }
+
+  if (!toAddress) {
+    status.textContent = "Укажи адрес получателя";
     return;
   }
 
   try {
-    status.textContent = "Ожидаем подтверждение в кошельке...";
+    status.textContent = "Подтверди в Tonkeeper...";
+
+    const amountNano = Math.floor(Number(amountStr) * 1e9);
 
     await tonConnectUI.sendTransaction({
       validUntil: Math.floor(Date.now() / 1000) + 300,
       messages: [
         {
-          address: "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ", 
-          amount: (Number(amount) * 1e9).toString()
+          address: toAddress,
+          amount: amountNano.toString()
         }
       ]
     });
@@ -44,6 +49,6 @@ document.getElementById("pay-btn").onclick = async () => {
 
   } catch (e) {
     console.log(e);
-    status.textContent = "Отмена или ошибка ❌";
+    status.textContent = "Отменено или ошибка ❌";
   }
 };
