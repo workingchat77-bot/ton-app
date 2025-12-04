@@ -1,84 +1,64 @@
-// Инициализация TonConnect
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
   manifestUrl: "https://workingchat77-bot.github.io/ton-app/tonconnect-manifest.json"
 });
 
-// Рисуем кнопку подключения
-tonConnectUI.renderWalletButton("#ton-connect-button");
+const connectBtn = document.getElementById("ton-connect-button");
+const walletAddress = document.getElementById("wallet-address");
+const walletBalance = document.getElementById("wallet-balance");
+const payBtn = document.getElementById("pay-btn");
 
-// Когда кошелек подключается / отключается
-tonConnectUI.onStatusChange(async (walletInfo) => {
-  const addrEl = document.getElementById("wallet-address");
-  const balEl = document.getElementById("wallet-balance");
+async function connectWallet() {
+  await tonConnectUI.connectWallet();
+}
 
-  if (!walletInfo) {
-    addrEl.textContent = "Кошелёк не подключен";
-    balEl.textContent = "Баланс: —";
+connectBtn.addEventListener("click", connectWallet);
+
+tonConnectUI.onStatusChange(async wallet => {
+  if (!wallet) {
+    walletAddress.innerText = "Кошелёк не подключен";
+    walletBalance.innerText = "";
     return;
   }
 
-  const address = walletInfo.account.address;
-  addrEl.textContent = "Адрес: " + address;
-  balEl.textContent = "Баланс: загружается…";
+  const address = wallet.account.address;
+  walletAddress.innerText = "Адрес: " + address;
 
   try {
-    // ✅ ПРОКСИ, чтобы браузер не блокировал CORS
-    const url = "https://corsproxy.io/?https://tonapi.io/v2/accounts/" + address;
-    const res = await fetch(url);
+    const res = await fetch(`https://tonapi.io/v2/accounts/${address}`);
     const data = await res.json();
-
-    const nano = data.balance || 0;
-    const ton = nano / 1e9;
-
-    balEl.textContent = "Баланс: " + ton.toFixed(4) + " TON";
+    const balanceTon = (data.balance / 1e9).toFixed(4);
+    walletBalance.innerText = Баланс: ${balanceTon} TON;
   } catch (e) {
-    console.log("balance error", e);
-    balEl.textContent = "Баланс: ошибка API";
+    walletBalance.innerText = "Не удалось получить баланс";
   }
 });
 
-// КНОПКА "ОПЛАТИТЬ"
-document.getElementById("pay-btn").onclick = async () => {
-  const amountStr = document.getElementById("pay-amount").value;
-  const toAddress = document.getElementById("pay-to").value.trim();
+// ====== ОПЛАТА ======
+payBtn.addEventListener("click", async () => {
+  const amount = document.getElementById("pay-amount").value;
+  const to = document.getElementById("pay-to").value;
   const status = document.getElementById("pay-status");
 
-  status.textContent = "";
-
-  if (!tonConnectUI.account) {
-    status.textContent = "Сначала подключи кошелёк";
+  if (!amount || !to) {
+    status.innerText = "Введите сумму и адрес";
     return;
   }
 
-  if (!amountStr || Number(amountStr) <= 0) {
-    status.textContent = "Укажи сумму";
-    return;
-  }
-
-  if (!toAddress) {
-    status.textContent = "Укажи адрес получателя";
-    return;
-  }
+  const nano = Math.floor(parseFloat(amount) * 1e9);
 
   try {
-    status.textContent = "Ожидаем подтверждение…";
-
-    const amountNano = Math.floor(Number(amountStr) * 1e9);
-
     await tonConnectUI.sendTransaction({
       validUntil: Math.floor(Date.now() / 1000) + 300,
       messages: [
         {
-          address: toAddress,
-          amount: amountNano.toString()
+          address: to,
+          amount: nano.toString()
         }
       ]
     });
 
-    status.textContent = "✅ Транзакция отправлена";
-
+    status.innerText = "✅ Транзакция отправлена в Tonkeeper";
   } catch (e) {
-    console.log("tx error", e);
-    status.textContent = "❌ Отменено или ошибка";
+    status.innerText = "❌ Отмена или ошибка";
   }
-};
+});
