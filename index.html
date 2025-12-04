@@ -1,102 +1,184 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Моё TON приложение</title>
-
+  <meta charset="UTF-8">
+  <title>TON WebApp</title>
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1aa3ff, #091428 60%);
       display: flex;
       justify-content: center;
       align-items: center;
+      color: white;
     }
 
-    .card {
-      background: rgba(0, 0, 0, 0.45);
-      padding: 30px 40px;
+    .app {
+      width: 390px;
+      max-width: 95%;
+      background: rgba(10, 20, 40, 0.92);
+      border-radius: 24px;
+      box-shadow: 0 0 60px rgba(0, 140, 255, 0.4);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .header img {
+      width: 48px;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
+    .panel {
+      background: rgba(0,0,0,0.35);
       border-radius: 16px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.6);
-      width: 360px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+
+    .panel h3 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .wallet-box {
       text-align: center;
     }
 
-    h1 {
-      margin-top: 0;
-      font-size: 22px;
+    #wallet-address {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 8px;
+      word-break: break-all;
     }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    button {
-      margin-top: 15px;
+    .pay-box input {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
-      background: #00c2ff;
-      color: #000;
+      outline: none;
+      background: #0b162f;
+      color: white;
+      margin-top: 6px;
+    }
+
+    .pay-box button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #00c2ff, #0077ff);
+      color: white;
       font-weight: bold;
-      font-size: 15px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #00a7dd;
+    .pay-box button:hover {
+      opacity: 0.9;
     }
 
-    hr {
-      margin: 20px 0;
-      border: 0;
-      border-top: 1px solid rgba(255,255,255,0.2);
-    }
-
-    #wallet-address,
     #pay-status {
-      margin-top: 10px;
-      font-size: 13px;
+      font-size: 11px;
+      margin-top: 6px;
       opacity: 0.8;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .action-btn {
+      background: rgba(0,0,0,0.4);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid rgba(0,140,255,0.2);
+    }
+
+    .action-btn:hover {
+      border-color: #1aa3ff;
+      box-shadow: 0 0 15px rgba(0,140,255,0.4);
+    }
+
+    .footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 11px;
+      opacity: 0.4;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>TON WebApp</h1>
-    <p>Тестовое приложение</p>
+  <div class="app">
 
-    <div id="ton-connect-button"></div>
-    <p id="wallet-address"></p>
+    <div class="header">
+      <img src="icon.png">
+      <h1>TON Application</h1>
+      <p>Powered by Tonkeeper</p>
+    </div>
 
-    <hr>
+    <div class="panel wallet-box">
+      <h3>Подключение кошелька</h3>
+      <div id="ton-connect-button"></div>
+      <div id="wallet-address"></div>
+    </div>
 
-    <h3>Тестовая оплата</h3>
+    <div class="panel pay-box">
+      <h3>Тестовая оплата</h3>
+      <input id="pay-amount" type="number" placeholder="0.01 TON">
+      <button id="pay-btn">Оплатить</button>
+      <div id="pay-status"></div>
+    </div>
 
-    <input
-      id="pay-amount"
-      type="number"
-      placeholder="Сумма TON (например 0.01)"
-      step="0.01"
-    />
+    <div class="actions">
+      <div class="action-btn">💼 Кабинет</div>
+      <div class="action-btn">📊 Статистика</div>
+      <div class="action-btn">💸 Выплаты</div>
+      <div class="action-btn">🔐 Безопасность</div>
+      <div class="action-btn">🛠 Настройки</div>
+      <div class="action-btn">📨 Поддержка</div>
+    </div>
 
-    <button id="pay-btn">Оплатить</button>
+    <div class="footer">
+      © 2025 TON WebApp
+    </div>
 
-    <p id="pay-status"></p>
   </div>
 
   <script src="main.js"></script>
