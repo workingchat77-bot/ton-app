@@ -3,35 +3,103 @@
 <head>
   <meta charset="UTF-8" />
   <title>Моё TON приложение</title>
+
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.45);
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      width: 360px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #00c2ff;
+      color: #000;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00a7dd;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    #wallet-address,
+    #pay-status {
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h1>Привет, это моё TON WebApp 👋</h1>
-  <p>Если ты это видишь — всё работает.</p>
+  <div class="card">
+    <h1>TON WebApp</h1>
+    <p>Тестовое приложение</p>
 
-  <!-- Кнопка подключения кошелька -->
-  <div id="ton-connect-button"></div>
+    <div id="ton-connect-button"></div>
+    <p id="wallet-address"></p>
 
-  <p id="wallet-address"></p>
+    <hr>
 
-  <hr>
+    <h3>Тестовая оплата</h3>
 
-  <h3>Тестовая оплата</h3>
+    <input
+      id="pay-amount"
+      type="number"
+      placeholder="Сумма TON (например 0.01)"
+      step="0.01"
+    />
 
-  <input
-    id="pay-amount"
-    type="number"
-    placeholder="Сумма TON (например 0.01)"
-    step="0.01"
-  />
+    <button id="pay-btn">Оплатить</button>
 
-  <br><br>
-
-  <button id="pay-btn">Оплатить</button>
-
-  <p id="pay-status"></p>
+    <p id="pay-status"></p>
+  </div>
 
   <script src="main.js"></script>
+
 </body>
 </html>
