@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>TON WebApp</title>
+
+  <!-- TonConnect UI -->
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 
   <style>
@@ -24,7 +26,7 @@
     .app {
       width: 390px;
       max-width: 95%;
-      background: rgba(10, 20, 40, 0.92);
+      background: rgba(10, 20, 40, 0.94);
       border-radius: 24px;
       box-shadow: 0 0 60px rgba(0, 140, 255, 0.4);
       padding: 20px;
@@ -39,6 +41,8 @@
 
     .header img {
       width: 48px;
+      height: 48px;
+      border-radius: 16px;
       margin-bottom: 10px;
     }
 
@@ -81,13 +85,14 @@
 
     .pay-box input {
       width: 100%;
-      padding: 12px;
+      padding: 10px 12px;
       border-radius: 12px;
       border: none;
       outline: none;
       background: #0b162f;
       color: white;
       margin-top: 6px;
+      font-size: 13px;
     }
 
     .pay-box button {
@@ -100,6 +105,7 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      font-size: 14px;
     }
 
     .pay-box button:hover {
@@ -110,6 +116,7 @@
       font-size: 11px;
       margin-top: 6px;
       opacity: 0.8;
+      min-height: 14px;
     }
 
     .actions {
@@ -120,6 +127,9 @@
     }
 
     .action-btn {
+      display: block;
+      text-decoration: none;
+      color: white;
       background: rgba(0,0,0,0.4);
       border-radius: 14px;
       padding: 12px;
@@ -148,32 +158,37 @@
   <div class="app">
 
     <div class="header">
-      <img src="icon.png">
+      <img src="icon.png" alt="icon">
       <h1>TON Application</h1>
-      <p>Powered by Tonkeeper</p>
+      <p>Powered by Tonkeeper / TonConnect</p>
     </div>
 
     <div class="panel wallet-box">
       <h3>Подключение кошелька</h3>
       <div id="ton-connect-button"></div>
-      <div id="wallet-address"></div>
+      <div id="wallet-address">Кошелёк не подключен</div>
     </div>
 
     <div class="panel pay-box">
-  <h3>Тестовая оплата</h3>
+      <h3>Тестовая оплата</h3>
 
-  <input id="pay-amount" type="number" placeholder="0.10 TON" step="0.01">
+      <input
+        id="pay-amount"
+        type="number"
+        placeholder="0.10 TON"
+        step="0.01"
+      >
 
-  <input
-    id="pay-to"
-    type="text"
-    placeholder="Адрес получателя (UQ... / EQ... / name.ton)"
-    style="margin-top:8px;"
-  >
+      <input
+        id="pay-to"
+        type="text"
+        placeholder="Адрес получателя (UQ... / EQ... / имя.ton)"
+        style="margin-top:8px;"
+      >
 
-  <button id="pay-btn">Оплатить</button>
-  <div id="pay-status"></div>
-</div>
+      <button id="pay-btn">Оплатить</button>
+      <div id="pay-status"></div>
+    </div>
 
     <div class="actions">
       <div class="action-btn">💼 Кабинет</div>
@@ -181,16 +196,4 @@
       <div class="action-btn">💸 Выплаты</div>
       <div class="action-btn">🔐 Безопасность</div>
       <div class="action-btn">🛠 Настройки</div>
-      <a class="action-btn" href="https://t.me/TonSupportRU" target="_blank" rel="noopener noreferrer">📨 Поддержка</a>
-    </div>
-
-    <div class="footer">
-      © 2025 TON WebApp
-    </div>
-
-  </div>
-
-  <script src="main.js"></script>
-
-</body>
-</html>
+      <a
